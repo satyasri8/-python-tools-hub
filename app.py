@@ -9,7 +9,7 @@ from palindrome_checker import palindrome_checker_app
 st.set_page_config(page_title="Python Tools Dashboard", page_icon="🧰", layout="wide")
 
 st.title("🧰 Python Tools Dashboard")
-st.write("Choose a tool based on your requirement 👇")
+
 
 tool = st.sidebar.radio(
     "Select Tool",
