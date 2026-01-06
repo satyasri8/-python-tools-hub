@@ -4,37 +4,45 @@ import random
 def guessing_game_app():
     st.header("🎯 Number Guessing Game")
 
-    # Select difficulty
+    # Difficulty selection
     difficulty = st.selectbox(
         "Choose Difficulty",
-        ("Easy", "Medium", "Hard")
+        ["Easy", "Medium", "Hard"]
     )
 
-    max_attempts = {
+    max_attempts_map = {
         "Easy": 10,
         "Medium": 7,
         "Hard": 5
-    }[difficulty]
+    }
 
-    # Initialize session state
+    max_attempts = max_attempts_map[difficulty]
+
+    # ---- SAFE SESSION STATE INITIALIZATION ----
     if "number" not in st.session_state:
         st.session_state.number = random.randint(1, 100)
-        st.session_state.wrong_attempts = 0
-        st.session_state.game_over = False
-        st.session_state.max_attempts = max_attempts
 
-    # Reset if difficulty changes
-    if st.session_state.max_attempts != max_attempts:
+    if "wrong_attempts" not in st.session_state:
+        st.session_state.wrong_attempts = 0
+
+    if "game_over" not in st.session_state:
+        st.session_state.game_over = False
+
+    if "difficulty" not in st.session_state:
+        st.session_state.difficulty = difficulty
+
+    # Reset game if difficulty changes
+    if st.session_state.difficulty != difficulty:
         st.session_state.number = random.randint(1, 100)
         st.session_state.wrong_attempts = 0
         st.session_state.game_over = False
-        st.session_state.max_attempts = max_attempts
+        st.session_state.difficulty = difficulty
 
     attempts_left = max_attempts - st.session_state.wrong_attempts
-    st.write(f"Wrong attempts left: **{attempts_left}**")
+    st.write(f"❌ Wrong attempts left: **{attempts_left}**")
 
     guess = st.slider(
-        "Guess a number",
+        "Guess a number between 1 and 100",
         1,
         100,
         disabled=st.session_state.game_over
@@ -54,7 +62,7 @@ def guessing_game_app():
             st.session_state.game_over = True
 
         if st.session_state.wrong_attempts >= max_attempts and not st.session_state.game_over:
-            st.error(f"❌ Game Over! The correct number was {st.session_state.number}")
+            st.error(f"❌ Game Over! The number was {st.session_state.number}")
             st.session_state.game_over = True
 
     if st.session_state.game_over:
@@ -62,4 +70,4 @@ def guessing_game_app():
             st.session_state.number = random.randint(1, 100)
             st.session_state.wrong_attempts = 0
             st.session_state.game_over = False
-            st.info("Game reset. Try again!")
+            st.info("Game restarted. Try again!")
