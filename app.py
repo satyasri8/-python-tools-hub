@@ -1,5 +1,3 @@
-st.set_page_config(page_title="Python Tools", page_icon="🧰", layout="wide")
-
 if tool == "Home":
     # Hero Section
     st.markdown(
